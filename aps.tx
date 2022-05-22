@@ -1,0 +1,66 @@
+#jbs second floor
+int srcIndex, string src, int srcX, int srcY,int dstIndex, string dst, int dstX, int dstY, int weight
+
+1,stars1,328,342,room,5
+2,room,326,317,room2,5
+3,room2,327,304,lift,15
+4,lift,328,233,stairs2,5
+5,stairs2,318,115,washroom,20
+6,cs8,342,246,cs9,5
+7,cs9,383,136,cs10,5
+8,cs10,412,137,cs11,5
+9,cs11,455,138,cs12,5
+10,cs12,536,132,node,10
+11,node,572,138,cs13,5
+12,cs13,569,107,cs14,2
+13,cs14,575,111,cs15,10
+14,cs15,606,135,cs16,5
+15,cs16,645,135,cs17,5
+16,cs17,640,109,cs18,2
+17,cs18,646,110,washroom,7
+18,washroom,693,119,stairs,10
+19,stairs,692,222,lift,2
+20,lift,693,237,washroom2,5
+21,iot,234,234,machine learning lab,5
+22,machine learning lab,421,347,5
+23,room3,555,349,room4,15
+24,room4,670,347,stairs,10
+25,stairs,688,344,end,5 
+
+#jbs first floor
+int srcIndex, string src, int srcX, int srcY,int dstIndex, string dst, int dstX, int dstY, int weight
+
+1,stairs,210,491,ff6,5
+2,ff6,244,496,ff7,5
+3,ff7,294,491,ff8,5
+4,ff8,326,489,ff9,5
+5,ff9,440.490,ff10,15
+6,ff10,475,492,ff11,5
+7,ff11,521,490,ff12,5
+8,ff12,558,489,stairs,7
+9,stairs,584,492,washroom,7
+10,washroom,586,455,lift,10
+11,lift,584,377,stairs,5
+12,stairs,585,342,washroom,10
+13,stairs,210,491,room,5
+14,room,209,455,lift,10
+15,lift,210,373,stairs,5
+16,stairs,209,355,washroom,15
+17,warshroom,211,258,end
+
+#jbs ground floor
+int srcIndex, string src, int srcX, int srcY,int dstIndex, string dst, int dstX, int dstY, int weight
+
+1,auditorium,460,214,lt1,25
+2,lt1,317,260,stairs,5
+3,stairs,314,291,lift,2
+4,lift,312,317,stairs,15
+5,staris,318,405,Digital Systems lab,5
+6,Digital systems lab,356,406,lab 2,25
+7,lab2,607,403,room,10
+8,room,605,342,lift,7
+9,lift,611,316,stairs,2
+10,stairs,607,301,lt2,10
+11,lt2,600,258,auditorium,25
+  
+
