@@ -3,6 +3,7 @@
 #include <fstream>
 #include<iostream>
 #include<list>
+#include <string>
 #include<vector>
 #include<queue>
 
@@ -26,11 +27,15 @@ queue<int> Xqueue,Yqueue;
 string source, destination;
 struct Node{
         string Name;
+        string Building;
+        string Floor;
         int Xpos;
         int Ypos;
         Node () {}
-        Node(string Name, int Xpos, int Ypos) {
+        Node(string Name,string Building,string Floor, int Xpos, int Ypos) {
             this->Name = Name;
+            this->Building = Building;
+            this->Floor = Floor;
             this->Xpos = Xpos;
             this->Ypos = Ypos;
         }
@@ -48,11 +53,12 @@ struct Edge {
         }
 };
 
+list<Edge> edgeList;
+vector<Node> nodeVector;
+
 class Graph {
 
     private:
-        list<Edge> edge_list;
-        vector<Node> nodeVector;
         int nodes;
         // distance is a 2-dimensional array that stores the shortest distance between [src][dst]
         vector<vector<int>> distance;
@@ -64,14 +70,72 @@ class Graph {
 
         Graph() {}
 
+        void ReadEdgesFile(list<Edge> edgeList){
+            fstream newfile;
+            int src,dst,weight;
+            newfile.open("Nodes.txt",ios::in); //open a file to perform read operation using file object
+            if (newfile.is_open()){ //checking whether the file is open
+              string tp;
+              while(getline(newfile, tp)){ //read data from file object and put it into string.
+            stringstream objS,objD,objW;
+                  string tempsrc = tp.substr(0,tp.find(":"));
+                  objS << tempsrc;
+                  objS >> src;
+                  string tempdst = tp.substr(tp.find(":")+1,tp.find(";"));
+                  objD << tempdst;
+                  objD >> dst;
+                  string tempW = tp.substr(tp.find(";")+1,1);
+                  objW << tempW;
+                  objW >> weight;
+                    Edge forward(src, dst, weight);
+                    edgeList.push_back(forward);
+                    Edge backward(dst, src, weight);
+                    edgeList.push_back(backward);
+                }
+              newfile.close(); //close the file object.
+           }
+           /*for(int i = 0; i < nodeVector.size(); i++){
+               cout << nodeVector[i].Name << endl;
+               cout << nodeVector[i].Xpos << endl;
+               cout << nodeVector[i].Ypos << endl;
+            }*/
+        }
+        void ReadNodeFile(vector<Node> nodeVector){
+            fstream newfile;
+            int X,Y;
+            newfile.open("Edges.txt",ios::in); //open a file to perform read operation using file object
+            if (newfile.is_open()){ //checking whether the file is open
+              string tp;
+              while(getline(newfile, tp)){ //read data from file object and put it into string.
+            stringstream objX, objY;
+                  string name = tp.substr(0,tp.find("."));
+                  string building = tp.substr(tp.find(".")+1,tp.find(","));
+                  string floor = tp.substr(tp.find(",")+1,tp.find(":"));
+                  string Xtemp = tp.substr(tp.find(":")+1,1);
+                  objX << Xtemp;
+                  objX >> X;
+                  string Ytemp = tp.substr(tp.find(";")+1,1);
+                  objY << Ytemp;
+                  objY >> Y;
+                  Node entry(name,building,floor,X,Y);
+                  nodeVector.push_back(entry);
+
+                }
+              newfile.close(); //close the file object.
+           }
+           /*for(int i = 0; i < nodeVector.size(); i++){
+               cout << nodeVector[i].Name << endl;
+               cout << nodeVector[i].Xpos << endl;
+               cout << nodeVector[i].Ypos << endl;
+            }*/
+        }
+
         Graph (int n) {
             nodes = n;
-            Node test1("St", 1, 8);
-            Node test2("Swet", 4, 2);
-            nodeVector.push_back(test1);
-            nodeVector.push_back(test2);
             distance.resize(n);
             next.resize(n);
+            ReadNodeFile(nodeVector);
+            ReadEdgesFile(edgeList);
 
             for (int i=0; i<n; i++) {
                 distance[i].resize(n, 999999999); // 999999999 indicates infinite distance
@@ -79,13 +143,6 @@ class Graph {
             }
         }
 
-        void AddEdge (int src, int dst, int weight) {
-            Edge forward(src, dst, weight);
-            edge_list.push_back(forward);
-            Edge backward(dst, src, weight);
-            edge_list.push_back(backward);
-
-        }
 
         void Floyd_Warshall() {
 
@@ -94,7 +151,7 @@ class Graph {
                 next[i][i] = i;
             }
 
-            for (auto edge : edge_list) {
+            for (auto edge : edgeList) {
                 int u = edge.src;
                 int v = edge.dst;
                 distance[u][v] = edge.weight;
@@ -140,47 +197,13 @@ class Graph {
                     Yqueue.push(nodeVector[it-1].Ypos);
                 }
 
-                for(int i = 0; i < nodeVector.size(); i++){
-                    if(nodeVector[i].Name == source){
-                        srcIndex = i+1;
-                    }
-                    if(nodeVector[i].Name == destination){
-                        dstIndex = i+1;
-                    }
-                }
-                cout << " srcIndex = " << srcIndex << "dstIndex = " << dstIndex;
+            }
+
         }
 
-    }
+
 };
 
-void ReadFile(vector<Node> nodeVector, string fileName){
-    fstream newfile;
-    int X,Y;
-    newfile.open(fileName,ios::in); //open a file to perform read operation using file object
-    if (newfile.is_open()){ //checking whether the file is open
-      string tp;
-      while(getline(newfile, tp)){ //read data from file object and put it into string.
-    stringstream objX, objY;
-          string name = tp.substr(0,tp.find(":"));
-          string Xtemp = tp.substr(tp.find(":")+1,1);
-          objX << Xtemp;
-          objX >> X;
-          string Ytemp = tp.substr(tp.find(";")+1,1);
-          objY << Ytemp;
-          objY >> Y;
-          Node entry(name,X,Y);
-          nodeVector.push_back(entry);
-
-        }
-      newfile.close(); //close the file object.
-   }
-   /*for(int i = 0; i < nodeVector.size(); i++){
-       cout << nodeVector[i].Name << endl;
-       cout << nodeVector[i].Xpos << endl;
-       cout << nodeVector[i].Ypos << endl;
-    }*/
-}
 
 void Start() {
     system("clear");
@@ -191,6 +214,15 @@ void Start() {
     cin >> source;
     cout<< "Please enter your destination: ";
     cin >> destination;
+    for(int i = 0; i < nodeVector.size(); i++){
+        if(nodeVector[i].Name == source){
+            srcIndex = i+1;
+        }
+        if(nodeVector[i].Name == destination){
+            dstIndex = i+1;
+        }
+    }
+
 }
 
 void displaymenu() {
@@ -202,7 +234,7 @@ void displaymenu() {
         cout<<"===================================================== \n";
         cout<<" 1.Start\n";
         cout<<" 2.Exit\n";
-        cout<<"Enter your choice(1-5):";
+        cout<<"Enter your choice(1-2):";
         cin>>yourchoice;
         switch (yourchoice)
         {
@@ -216,32 +248,10 @@ void displaymenu() {
 
 int main() {
 
-    displaymenu();
-
     Graph g(5);
-
-    // Edges from node 0
-    // AddEdge(src, dst, weight, bi-directional(true/false))
-    g.AddEdge(0, 1, 9);
-    g.AddEdge(0, 3, 2);
-    g.AddEdge(0, 4, 3);
-
-    // Edges from node 1
-    g.AddEdge(1, 2, 3);
-    g.AddEdge(1, 4, 7);
-
-    // Edges from node 2
-    // Edge from 2 -> 3 is unidirectional. If it was bidirectional, it would introduce negative weight cycle
-    // causing the Floyd-Warshall algorithm to fail.
-    g.AddEdge(2, 3, -2);
-    g.AddEdge(2, 4, 1);
-
-    // Edges from node 3
-    g.AddEdge(3, 4, 1);
-
     g.Floyd_Warshall();
-    cout << "\n";
-    g.PathConstruction(1, 2);
+    displaymenu();
+    g.PathConstruction(srcIndex, dstIndex);
 
     return 0;
 }

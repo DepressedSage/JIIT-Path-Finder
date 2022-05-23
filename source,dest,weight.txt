@@ -1,0 +1,66 @@
+#jbs second floor
+int srcIndex, string src, int srcX, int srcY,int dstIndex, string dst, int dstX, int dstY, int weight
+
+stars1,room,5
+room,room2,5
+room2,lift,15
+lift,stairs2,5
+stairs2,washroom,20
+cs8,cs9,5
+cs9,cs10,5
+cs10,cs11,5
+cs11,cs12,5
+cs12,node,10
+node,cs13,5
+cs13,cs14,2
+cs14,cs15,10
+cs15,cs16,5
+cs16,cs17,5
+cs17,cs18,2
+cs18,washroom,7
+washroom,stairs,10
+stairs,lift,2
+lift,washroom2,5
+iot,machine learning lab,5
+machine learning lab,5
+room3,room4,15
+room4,stairs,10
+stairs,end,5
+
+#jbs first floor
+int srcIndex, string src, int srcX, int srcY,int dstIndex, string dst, int dstX, int dstY, int weight
+
+stairs,ff6,5
+ff6,ff7,5
+ff7,ff8,5
+ff8,ff9,5
+ff9,ff10,15
+ff10,ff11,5
+ff11,ff12,5
+ff12,stairs,7
+stairs,washroom,7
+washroom,lift,10
+lift,stairs,5
+stairs,washroom,10
+stairs,room,5
+room,lift,10
+lift,stairs,5
+stairs,washroom,15
+warshroom,end
+
+#jbs ground floor
+int srcIndex, string src, int srcX, int srcY,int dstIndex, string dst, int dstX, int dstY, int weight
+
+auditorium,lt1,25
+lt1,stairs,5
+stairs,lift,2
+lift,stairs,15
+staris,Digital Systems lab,5
+Digital systems lab,lab 2,25
+lab2,room,10
+room,lift,7
+lift,stairs,2
+stairs,lt2,10
+lt2,auditorium,25
+
+

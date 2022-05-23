@@ -16,10 +16,10 @@ struct Node{
         }
 };
 int main() {
-            vector<Node> nodeVector;
+    vector<Node> nodeVector;
     fstream newfile;
     int X,Y;
-newfile.open("test.txt",ios::in); //open a file to perform read operation using file object
+    newfile.open("test.txt",ios::in); //open a file to perform read operation using file object
    if (newfile.is_open()){ //checking whether the file is open
       string tp;
       while(getline(newfile, tp)){ //read data from file object and put it into string.

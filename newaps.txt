@@ -1,0 +1,63 @@
+(ROOM NO,X,Y)
+#jbs second floor
+stars1,328,342
+room,326,317
+room2,327,304
+lift,328,233
+stairs2,318,115
+cs8,342,246
+cs9,383,136
+cs10,412,137
+cs11,455,138
+cs12,536,132
+node,572,138
+cs13,569,107
+cs14,575,111
+cs15,606,135
+cs16,645,135
+cs17,640,109
+cs18,646,110
+washroom,693,119
+stairs,692,222
+lift,693,237
+iot,234,234
+machine learning lab,421,347
+room3,555,349
+room4,670,347
+stairs,688,344,
+
+#jbs first floor
+
+stairs,210,491
+ff6,244,496
+ff7,294,491
+ff8,326,489
+ff9,440.490
+ff10,475,492
+ff11,521,490
+ff12,558,489
+stairs,584,492
+washroom,586,455
+lift,584,377
+stairs,585,342
+stairs,210,491
+room,209,455
+lift,210,373
+stairs,209,355
+warshroom,211,258
+
+#jbs ground floor
+
+auditorium,460,214
+lt1,317,260
+stairs,314,291
+lift,312,317
+staris,318,405
+Digital systems lab,356,406
+lab2,607,403
+room,605,342
+lift,611,316
+stairs,607,301
+lt2,600,258
+
+
