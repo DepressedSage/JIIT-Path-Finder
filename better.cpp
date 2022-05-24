@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iterator>
 #include <sstream>
 #include <fstream>
 #include<iostream>
@@ -10,47 +11,45 @@
 using namespace std;
 
 /*
-         1
-        /|\
-       / | \
-     9/  |7 \3
-     / 3 |   \
-    0----4----2
-     \   | 1 /
-     2\  |1 /-2
-       \ | /
-        \|/
-         3
-*/
+   1
+   /|\
+   / | \
+   9/  |7 \3
+   / 3 |   \
+   0----4----2
+   \   | 1 /
+   2\  |1 /-2
+   \ | /
+   \|/
+   3
+   */
 int yourchoice,temp=0, srcIndex, dstIndex;
 queue<int> Xqueue,Yqueue;
 string source, destination;
 struct Node{
-        string Name;
-        string Building;
-        string Floor;
-        int Xpos;
-        int Ypos;
-        Node () {}
-        Node(string Name,string Building,string Floor, int Xpos, int Ypos) {
-            this->Name = Name;
-            this->Building = Building;
-            this->Floor = Floor;
-            this->Xpos = Xpos;
-            this->Ypos = Ypos;
-        }
+    string Name;
+    string Building;
+    int Xpos;
+    int Ypos;
+    Node () {}
+    Node(string Building, string Name,int Xpos, int Ypos) {
+        this->Name = Name;
+        this->Building = Building;
+        this->Xpos = Xpos;
+        this->Ypos = Ypos;
+    }
 };
 struct Edge {
 
-        int src;
-        int dst;
-        int weight;
-        Edge () {}
-        Edge (int src, int dst, int weight) {
-            this->src = src;
-            this->dst = dst;
-            this->weight = weight;
-        }
+    int src;
+    int dst;
+    int weight;
+    Edge () {}
+    Edge (int src, int dst, int weight) {
+        this->src = src;
+        this->dst = dst;
+        this->weight = weight;
+    }
 };
 
 list<Edge> edgeList;
@@ -70,64 +69,78 @@ class Graph {
 
         Graph() {}
 
-        void ReadEdgesFile(list<Edge> edgeList){
+        void ReadNodeFile(vector<Node>& nodeVector){
             fstream newfile;
-            int src,dst,weight;
+            int X,Y;
             newfile.open("Nodes.txt",ios::in); //open a file to perform read operation using file object
             if (newfile.is_open()){ //checking whether the file is open
-              string tp;
-              while(getline(newfile, tp)){ //read data from file object and put it into string.
-            stringstream objS,objD,objW;
-                  string tempsrc = tp.substr(0,tp.find(":"));
-                  objS << tempsrc;
-                  objS >> src;
-                  string tempdst = tp.substr(tp.find(":")+1,tp.find(";"));
-                  objD << tempdst;
-                  objD >> dst;
-                  string tempW = tp.substr(tp.find(";")+1,1);
-                  objW << tempW;
-                  objW >> weight;
+                string tp;
+                while(getline(newfile, tp)){ //read data from file object and put it into string.
+                    stringstream objX, objY;
+                    string building = tp.substr(0,4);
+                    string name = tp.substr(tp.find(":")+1,tp.find(";")-5);
+                    string Xtemp = tp.substr(tp.find(";")+1,3);
+                    objX << Xtemp;
+                    objX >> X;
+                    string Ytemp = tp.substr(tp.find(",")+1,3);
+                    objY << Ytemp;
+                    objY >> Y;
+                    Node entry(building,name,X,Y);
+                    nodeVector.push_back(entry);
+
+                }
+                newfile.close(); //close the file object.
+            }
+            /*for(int i = 0; i < nodeVector.size(); i++){
+              cout << nodeVector[i].Building << " ";
+              cout << nodeVector[i].Name << " ";
+              cout << nodeVector[i].Xpos << " ";
+              cout << nodeVector[i].Ypos << endl;
+              }*/
+        }
+        void ReadEdgesFile(list<Edge>& edgeList){
+            fstream newfile;
+            int src,dst,weight;
+            newfile.open("Edges.txt",ios::in); //open a file to perform read operation using file object
+            if (newfile.is_open()){ //checking whether the file is open
+                string tp;
+                while(getline(newfile, tp)){ //read data from file object and put it into string.
+                    source = tp.substr(0,tp.find(";"));
+                    int len = tp.find(",")-tp.find(";");
+                    destination = tp.substr(tp.find(";")+1,len-1);
+                    stringstream objS,objD,objW;
+                    for(int i = 0; i < nodeVector.size(); i++){
+                        if(nodeVector[i].Name == source){
+                            src = i+1;
+                        }
+                        if(nodeVector[i].Name == destination){
+                            dst = i+1;
+                        }
+                    }
+                    int len1 = tp.find(".")-tp.find(",")-1;
+                    string tempW = tp.substr(tp.find(",")+1,len1);
+                    /*cout << source << " ";
+                      cout << src << " ";
+                      cout << destination << " ";
+                      cout << dst << "\t ";
+                      cout << tempW << " \t\t ";
+                      cout << tp.find(",")<< " ";
+                      cout << tp.find(".")<< " ";
+                      cout << len1 << endl;*/
+                    objW << tempW;
+                    objW >> weight;
                     Edge forward(src, dst, weight);
                     edgeList.push_back(forward);
                     Edge backward(dst, src, weight);
                     edgeList.push_back(backward);
                 }
-              newfile.close(); //close the file object.
-           }
-           /*for(int i = 0; i < nodeVector.size(); i++){
-               cout << nodeVector[i].Name << endl;
-               cout << nodeVector[i].Xpos << endl;
-               cout << nodeVector[i].Ypos << endl;
-            }*/
-        }
-        void ReadNodeFile(vector<Node> nodeVector){
-            fstream newfile;
-            int X,Y;
-            newfile.open("Edges.txt",ios::in); //open a file to perform read operation using file object
-            if (newfile.is_open()){ //checking whether the file is open
-              string tp;
-              while(getline(newfile, tp)){ //read data from file object and put it into string.
-            stringstream objX, objY;
-                  string name = tp.substr(0,tp.find("."));
-                  string building = tp.substr(tp.find(".")+1,tp.find(","));
-                  string floor = tp.substr(tp.find(",")+1,tp.find(":"));
-                  string Xtemp = tp.substr(tp.find(":")+1,1);
-                  objX << Xtemp;
-                  objX >> X;
-                  string Ytemp = tp.substr(tp.find(";")+1,1);
-                  objY << Ytemp;
-                  objY >> Y;
-                  Node entry(name,building,floor,X,Y);
-                  nodeVector.push_back(entry);
-
-                }
-              newfile.close(); //close the file object.
-           }
-           /*for(int i = 0; i < nodeVector.size(); i++){
-               cout << nodeVector[i].Name << endl;
-               cout << nodeVector[i].Xpos << endl;
-               cout << nodeVector[i].Ypos << endl;
-            }*/
+                newfile.close(); //close the file object.
+            }
+            /*for(auto edge : edgeList){
+              cout << edge.src << " ";
+              cout << edge.dst << " ";
+              cout << edge.weight << endl;
+              }*/
         }
 
         Graph (int n) {
@@ -168,6 +181,19 @@ class Graph {
                     }
                 }
             }
+
+            for(int i = 0; i < distance.size(); i++){
+                for(int j = 0; j < distance[i].size(); j++){
+                    cout << next[i][j] << " ";
+                }
+                cout << endl;
+            }
+            for(int i = 0; i < distance.size(); i++){
+                for(int j = 0; j < distance[i].size(); j++){
+                    cout << distance[i][j] << " ";
+                }
+                cout << endl;
+            }
         }
 
         // Construct path from source node to destination node
@@ -176,7 +202,7 @@ class Graph {
             cout << "# Path between " << src << " and " << dst << " : ";
 
             if (next[src][dst] == -1) {
-               cout << "No path exists" << endl;
+                cout << "No path exists" << endl;
             }
             else {
                 vector<int> path;
@@ -190,7 +216,7 @@ class Graph {
                 cout << "START\n";
                 for (auto& it : path)
                     cout << it << " ";
-                 cout << "END" << endl;
+                cout << "END" << endl;
 
                 for(auto& it : path){
                     Xqueue.push(nodeVector[it-1].Xpos);
@@ -204,6 +230,7 @@ class Graph {
 
 };
 
+Graph g(89);
 
 void Start() {
     system("clear");
@@ -222,6 +249,7 @@ void Start() {
             dstIndex = i+1;
         }
     }
+    g.PathConstruction(srcIndex, dstIndex);
 
 }
 
@@ -248,10 +276,14 @@ void displaymenu() {
 
 int main() {
 
-    Graph g(5);
     g.Floyd_Warshall();
-    displaymenu();
-    g.PathConstruction(srcIndex, dstIndex);
+    //displaymenu();
+            for(int i = 0; i < nodeVector.size(); i++){
+              cout << nodeVector[i].Building << " ";
+              cout << nodeVector[i].Name << " ";
+              cout << nodeVector[i].Xpos << " ";
+              cout << nodeVector[i].Ypos << endl;
+              }
 
     return 0;
 }
