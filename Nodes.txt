@@ -35,9 +35,7 @@ ABB2:STAFFCABIN3;300,132
 ABB2:STAFFCABIN2;202,132
 ABB2:STAFFCABIN1;180,132
 jbs2:stairs1;328,342
-jbs2:room;326,317
 jbs2:room2;327,304
-jbs2:lift;328,233
 jbs2:stairs2;318,115
 jbs2:cs8;342,246
 jbs2:cs9;383,136
@@ -69,21 +67,16 @@ jbs1:ff11;521,490
 jbs1:ff12;558,489
 jbs1:stairs;584492
 jbs1:washroom;586,455
-jbs1:lift;584,377
 jbs1:stairs;585,342
 jbs1:stairs;210,491
-jbs1:room;209455
-jbs1:lift;210,373
 jbs1:stairs;209,355
 jbs1:warshroom;211,258
 jbs0:auditorium;460,214
 jbs0:lt1;317,260
 jbs0:stairs;314,291
-jbs0:lift;312,317
 jbs0:staris;318,405
 jbs0:Digital systems lab;356,406
 jbs0:lab2;607,403
 jbs0:room;605,342
-jbs0:lift;611,316
 jbs0:stairs;607,301
 jbs0:lt2;600,258

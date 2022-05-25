@@ -26,34 +26,35 @@ using namespace std;
 int yourchoice,temp=0, srcIndex, dstIndex;
 queue<int> Xqueue,Yqueue;
 string source, destination;
-struct Node{
-    string Name;
-    string Building;
-    int Xpos;
-    int Ypos;
-    Node () {}
-    Node(string Building, string Name,int Xpos, int Ypos) {
-        this->Name = Name;
-        this->Building = Building;
-        this->Xpos = Xpos;
-        this->Ypos = Ypos;
-    }
+class Node {
+    public:
+        string Name;
+        string Building;
+        int Xpos;
+        int Ypos;
+        Node () {}
+        Node(string Building, string Name,int Xpos, int Ypos) {
+            this->Name = Name;
+            this->Building = Building;
+            this->Xpos = Xpos;
+            this->Ypos = Ypos;
+        }
 };
-struct Edge {
-
-    int src;
-    int dst;
-    int weight;
-    Edge () {}
-    Edge (int src, int dst, int weight) {
-        this->src = src;
-        this->dst = dst;
-        this->weight = weight;
-    }
+class Edge {
+    public:
+        int src;
+        int dst;
+        int weight;
+        Edge () {}
+        Edge (int src, int dst, int weight) {
+            this->src = src;
+            this->dst = dst;
+            this->weight = weight;
+        }
 };
 
-list<Edge> edgeList;
 vector<Node> nodeVector;
+vector<Edge> edgeVector;
 
 class Graph {
 
@@ -98,7 +99,7 @@ class Graph {
               cout << nodeVector[i].Ypos << endl;
               }*/
         }
-        void ReadEdgesFile(list<Edge>& edgeList){
+        void ReadEdgesFile(vector<Edge>& edgeVector){
             fstream newfile;
             int src,dst,weight;
             newfile.open("Edges.txt",ios::in); //open a file to perform read operation using file object
@@ -129,14 +130,11 @@ class Graph {
                       cout << len1 << endl;*/
                     objW << tempW;
                     objW >> weight;
-                    Edge forward(src, dst, weight);
-                    edgeList.push_back(forward);
-                    Edge backward(dst, src, weight);
-                    edgeList.push_back(backward);
+                    AddEdge(src,dst ,weight);
                 }
                 newfile.close(); //close the file object.
             }
-            /*for(auto edge : edgeList){
+            /*for(auto edge : edgeVector){
               cout << edge.src << " ";
               cout << edge.dst << " ";
               cout << edge.weight << endl;
@@ -148,14 +146,20 @@ class Graph {
             distance.resize(n);
             next.resize(n);
             ReadNodeFile(nodeVector);
-            ReadEdgesFile(edgeList);
+            ReadEdgesFile(edgeVector);
 
-            for (int i=0; i<n; i++) {
+            for (int i=0; i<distance.size(); i++) {
                 distance[i].resize(n, 999999999); // 999999999 indicates infinite distance
                 next[i].resize(n, -1);
             }
         }
 
+        void AddEdge (int src, int dst, int weight) {
+            Edge f(src, dst, weight);
+            edgeVector.push_back(f);
+            Edge b(dst, src, weight);
+            edgeVector.push_back(b);
+        }
 
         void Floyd_Warshall() {
 
@@ -164,11 +168,16 @@ class Graph {
                 next[i][i] = i;
             }
 
-            for (auto edge : edgeList) {
-                int u = edge.src;
-                int v = edge.dst;
-                distance[u][v] = edge.weight;
+            cout << distance.size() << " " << next.size() << endl;
+            int f = 0;
+            for(int i = 0; i < edgeVector.size(); i++){
+                int u = edgeVector[i].src;
+                //cout << edge.src << " "<< u << "\t";
+                int v = edgeVector[i].dst;
+                //cout << edge.dst << " " << v << "\t";
+                distance[u][v] = edgeVector[i].weight;
                 next[u][v] = v;
+                cout << v << " " << next[u][v] << endl;
             }
 
             for (int k=0; k<nodes; k++) {
@@ -182,17 +191,12 @@ class Graph {
                 }
             }
 
-            for(int i = 0; i < distance.size(); i++){
-                for(int j = 0; j < distance[i].size(); j++){
-                    cout << next[i][j] << " ";
+            cout << "Shortest distance between nodes" << endl;
+            for (int u=0; u<nodes; u++) {
+                for (int v=u+1; v<nodes; v++) {
+                    //cout << "\nDistance ( " << u << " - " << v << " ) : " << distance[u][v] << endl;
+                    //PathConstruction(u, v);
                 }
-                cout << endl;
-            }
-            for(int i = 0; i < distance.size(); i++){
-                for(int j = 0; j < distance[i].size(); j++){
-                    cout << distance[i][j] << " ";
-                }
-                cout << endl;
             }
         }
 
@@ -230,7 +234,7 @@ class Graph {
 
 };
 
-Graph g(89);
+Graph g(74);
 
 void Start() {
     system("clear");
@@ -278,12 +282,6 @@ int main() {
 
     g.Floyd_Warshall();
     //displaymenu();
-            for(int i = 0; i < nodeVector.size(); i++){
-              cout << nodeVector[i].Building << " ";
-              cout << nodeVector[i].Name << " ";
-              cout << nodeVector[i].Xpos << " ";
-              cout << nodeVector[i].Ypos << endl;
-              }
 
     return 0;
 }
