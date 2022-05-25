@@ -10,19 +10,6 @@
 
 using namespace std;
 
-/*
-   1
-   /|\
-   / | \
-   9/  |7 \3
-   / 3 |   \
-   0----4----2
-   \   | 1 /
-   2\  |1 /-2
-   \ | /
-   \|/
-   3
-   */
 int yourchoice,temp=0, srcIndex, dstIndex;
 queue<int> Xqueue,Yqueue;
 string source, destination;
@@ -92,12 +79,6 @@ class Graph {
                 }
                 newfile.close(); //close the file object.
             }
-            /*for(int i = 0; i < nodeVector.size(); i++){
-              cout << nodeVector[i].Building << " ";
-              cout << nodeVector[i].Name << " ";
-              cout << nodeVector[i].Xpos << " ";
-              cout << nodeVector[i].Ypos << endl;
-              }*/
         }
         void ReadEdgesFile(list<Edge>& edgeList){
             fstream newfile;
@@ -120,25 +101,12 @@ class Graph {
                     }
                     int len1 = tp.find(".")-tp.find(",")-1;
                     string tempW = tp.substr(tp.find(",")+1,len1);
-                    /*cout << source << " ";
-                      cout << src << " ";
-                      cout << destination << " ";
-                      cout << dst << "\t ";
-                      cout << tempW << " \t\t ";
-                      cout << tp.find(",")<< " ";
-                      cout << tp.find(".")<< " ";
-                      cout << len1 << endl;*/
                     objW << tempW;
                     objW >> weight;
                     AddEdge(src,dst ,weight);
                 }
                 newfile.close(); //close the file object.
             }
-            /*for(auto edge : edgeList){
-              cout << edge.src << " ";
-              cout << edge.dst << " ";
-              cout << edge.weight << endl;
-              }*/
         }
 
         Graph (int n) {
