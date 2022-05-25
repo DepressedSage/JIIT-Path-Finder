@@ -11,8 +11,8 @@
 using namespace std;
 
 int yourchoice,temp=0, srcIndex, dstIndex;
-queue<int> Xqueue,Yqueue;
 string source, destination;
+
 class Node {
     public:
         string Name;
@@ -41,7 +41,7 @@ class Edge {
 };
 
 vector<Node> nodeVector;
-list<Edge> edgeList;
+vector<Edge> edgeList;
 
 class Graph {
 
@@ -80,7 +80,7 @@ class Graph {
                 newfile.close(); //close the file object.
             }
         }
-        void ReadEdgesFile(list<Edge>& edgeList){
+        void ReadEdgesFile(vector<Edge>& edgeList){
             fstream newfile;
             int src,dst,weight;
             newfile.open("Edges.txt",ios::in); //open a file to perform read operation using file object
@@ -168,6 +168,7 @@ class Graph {
         // Construct path from source node to destination node
         void PathConstruction (int src, int dst) {
 
+            queue<int> Xqueue,Yqueue,Jqueue;
             if (next[src][dst] == -1) {
                 cout << "No path exists" << endl;
             }
@@ -180,21 +181,13 @@ class Graph {
                     path.push_back(src);
                 }
 
-                for (auto& it : path)
-                    cout << it << " ";
-
-                for(auto& it : path){
-                    Xqueue.push(nodeVector[it-1].Xpos);
-                    Yqueue.push(nodeVector[it-1].Ypos);
-                }
-
                 fstream newfile;
-                newfile.open("Quardinates.txt", ios::out);
+                newfile.open("coordinates.txt", ios::out);
                 if (newfile.is_open()){
-                    while(!Xqueue.empty()){
-                    string tp = to_string(Xqueue.front())+";"+to_string(Yqueue.front())+"\n";
-                    newfile << tp;
-                    Xqueue.pop();Yqueue.pop();}
+                    for(auto& it : path){
+                        string tp = nodeVector[it-1].Building+";"+to_string(nodeVector[it-1].Xpos)+";"+to_string(nodeVector[it-1].Ypos)+"\n";
+                        newfile << tp;
+                        Xqueue.pop();Yqueue.pop();}
                     newfile.close();
                 }
 
@@ -225,7 +218,10 @@ void Start() {
         }
     }
     g.PathConstruction(srcIndex, dstIndex);
-
+    string filename = "./lineDraw.py";
+    string command = "python ";
+    command += filename;
+    system(command.c_str());
 }
 
 void displaymenu() {
