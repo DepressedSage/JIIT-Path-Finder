@@ -60,7 +60,7 @@ class Graph {
         void ReadNodeFile(vector<Node>& nodeVector){
             fstream newfile;
             int X,Y;
-            newfile.open("Nodes.txt",ios::in); //open a file to perform read operation using file object
+            newfile.open("nodes.txt",ios::in); //open a file to perform read operation using file object
             if (newfile.is_open()){ //checking whether the file is open
                 string tp;
                 while(getline(newfile, tp)){ //read data from file object and put it into string.
@@ -83,7 +83,7 @@ class Graph {
         void ReadEdgesFile(vector<Edge>& edgeList){
             fstream newfile;
             int src,dst,weight;
-            newfile.open("Edges.txt",ios::in); //open a file to perform read operation using file object
+            newfile.open("edges.txt",ios::in); //open a file to perform read operation using file object
             if (newfile.is_open()){ //checking whether the file is open
                 string tp;
                 while(getline(newfile, tp)){ //read data from file object and put it into string.
@@ -101,6 +101,14 @@ class Graph {
                     }
                     int len1 = tp.find(".")-tp.find(",")-1;
                     string tempW = tp.substr(tp.find(",")+1,len1);
+                    /*cout << source << " ";
+                    cout << src << " ";
+                    cout << destination << " ";
+                    cout << dst << "\t ";
+                    cout << tempW << " \t\t ";
+                    cout << tp.find(",")<< " ";
+                    cout << tp.find(".")<< " ";
+                    cout << len1 << endl;*/
                     objW << tempW;
                     objW >> weight;
                     AddEdge(src,dst ,weight);
@@ -136,6 +144,8 @@ class Graph {
                 distance[i][i] = 0;
                 next[i][i] = i;
             }
+            for(auto& it: edgeList)
+                cout<< it.src << " " << it.dst << " " << it.weight << endl;
 
             cout << distance.size() << " " << next.size() << endl;
             int f = 0;
@@ -187,7 +197,8 @@ class Graph {
                     for(auto& it : path){
                         string tp = nodeVector[it-1].Building+";"+to_string(nodeVector[it-1].Xpos)+";"+to_string(nodeVector[it-1].Ypos)+"\n";
                         newfile << tp;
-                        Xqueue.pop();Yqueue.pop();}
+                        cout << nodeVector[it-1].Building << " " << nodeVector[it-1].Name << endl;
+                    }
                     newfile.close();
                 }
 
@@ -198,10 +209,10 @@ class Graph {
 
 };
 
-Graph g(89);
+Graph g(69);
 
 void Start() {
-    system("clear");
+    //system("clear");
     cout<<"===================================================== \n";
     cout<<" \t\t START \t \n";
     cout<<"===================================================== \n";
@@ -217,6 +228,8 @@ void Start() {
             dstIndex = i+1;
         }
     }
+    g.ReadEdgesFile(edgeList);
+
     g.PathConstruction(srcIndex, dstIndex);
     string filename = "./lineDraw.py";
     string command = "python ";
@@ -227,6 +240,7 @@ void Start() {
 void displaymenu() {
     string confirm;
     do {
+
         system("clear");
         cout<<"===================================================== \n";
         cout<<" \t\tMENU \t \n";
